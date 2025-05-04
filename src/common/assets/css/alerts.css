@@ -1,0 +1,32 @@
+
+.black-gold-alert {
+    border: 2px solid #FFD700;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    font-family: 'Segoe UI', sans-serif;
+}
+  
+.black-gold-title {
+    font-size: 1.8rem;
+    color: #FFD700;
+    text-shadow: 0 0 5px #FFD700;
+}
+  
+.black-gold-text {
+    font-size: 1rem;
+    color: #f1c40f;
+}
+  
+.black-gold-button {
+    background-color: #FFD700 !important;
+    color: #0d0d0d !important;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 0.6em 1.2em;
+    transition: background-color 0.3s ease;
+}
+  
+.black-gold-button:hover {
+    background-color: #e6c200 !important;
+}
+  
