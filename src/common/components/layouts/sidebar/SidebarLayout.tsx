@@ -12,11 +12,12 @@ interface SidebarProps {
 
 export const SidebarLayout = ({ children, logoText = "Belleza Perfecta"}: SidebarProps) => {
   const location = useLocation();
-  const { menuItems } = SidebarItemsNavigationHook(location.pathname);
+  const { user } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { logout, loading } = useAuth();
+  const { menuItems } = SidebarItemsNavigationHook(location.pathname, user);
 
   // Función para determinar si está en móvil y ajustar el estado
   useEffect(() => {
