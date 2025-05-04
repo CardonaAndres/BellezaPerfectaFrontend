@@ -4,6 +4,8 @@ import { getStockStatus,formatDate, formatPrice } from '../ts/styles';
 import { useState } from 'react';
 import { ProductFormModal } from './ProductFormModal';
 import { useProductsHook } from '../hooks/useProductsHook';
+import { Link } from 'react-router-dom';
+import { router } from '../../common/configs/config';
 
 type ProductCardProps = {
   product: Product;
@@ -76,10 +78,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             </div>
 
             <div className="flex justify-between mt-auto">
-            <button className="text-gray-300 hover:text-white text-sm flex items-center bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-md transition-colors duration-300">
+            <Link to={`${router.inventoryRecords}?product_ID=${product.product_ID}`} className="text-gray-300 hover:text-white text-sm flex items-center bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-md transition-colors duration-300">
                 <Info size={14} className="mr-1" />
                 Detalles
-            </button>
+            </Link>
             <div className="flex gap-2">
                 <button onClick={handleModal} className="text-amber-500 hover:text-amber-400 text-sm flex items-center bg-transparent hover:bg-gray-800 p-1 rounded-md transition-colors duration-300">
                 <Edit size={16} />

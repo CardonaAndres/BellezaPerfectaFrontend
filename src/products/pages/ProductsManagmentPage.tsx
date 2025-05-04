@@ -10,30 +10,32 @@ export const ProductsManagmentPage = () => {
     const { loading, products, meta, getAllProducts } = useProductsHook();
 
     const [page, setPage] = useState(() => {
-        const storedPage = sessionStorage.getItem('clientsPage');
+        const storedPage = sessionStorage.getItem('productsPage');
         return storedPage ? parseInt(storedPage) : 1;
     });
     
     const [limit, setLimit] = useState(() => {
-        const storedLimit = sessionStorage.getItem('clientsLimit');
+        const storedLimit = sessionStorage.getItem('productsLimit');
         return storedLimit ? parseInt(storedLimit) : 18;
     });
     
     const handleLimitChange = (newLimit: number) => {
         setLimit(newLimit);
-        sessionStorage.setItem('clientsLimit', newLimit.toString());
+        sessionStorage.setItem('productsLimit', newLimit.toString());
+    };
+
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+        sessionStorage.setItem('productsPage', newPage.toString());
+        window.scrollTo(0, 0);
     };
 
     useEffect(() => {
         getAllProducts({ page, limit });
-        sessionStorage.setItem('clientsPage', page.toString());
+        sessionStorage.setItem('productsPage', page.toString());
     }, [page, limit])
     
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage);
-        sessionStorage.setItem('clientsPage', newPage.toString());
-        window.scrollTo(0, 0);
-    };
+
 
     if(loading) return <LoadingScreen />
 

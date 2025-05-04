@@ -5,5 +5,6 @@ export const router = {
     login : '/login',
     panel : '/panel',
     clients : '/clients',
-    products : '/products'
+    products : '/products',
+    inventoryRecords : '/product-inventory-records'
 }

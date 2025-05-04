@@ -8,6 +8,7 @@ import { ProtectedRoute } from './auth/components/ProtectedRoute';
 import { PanelPage } from './panel/pages/PanelPage';
 import { ClientManagementPage } from './clients/pages/ClientManagementPage';
 import { ProductsManagmentPage } from './products/pages/ProductsManagmentPage';
+import { InventoryRecordsPage } from './inventory/pages/InventoryRecordsPage';
 
 function App() {
   
@@ -22,6 +23,7 @@ function App() {
             <Route path={router.panel} element={<PanelPage />} /> 
             <Route path={router.clients} element={<ClientManagementPage/>} />
             <Route path={router.products} element={<ProductsManagmentPage />} />
+            <Route path={router.inventoryRecords} element={<InventoryRecordsPage />} />
       
           </Route>
           
