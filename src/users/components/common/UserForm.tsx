@@ -38,7 +38,7 @@ export const UserForm = ({ onClose, initialData, isAdminPage = false } : Props) 
       });
 
     const onSubmited = handleSubmit(async (userData : UserProfileProps) => {
-        let userDataFilter: UserProfileProps;
+        let userDataFilter
 
         if (isEditMode && userData.password === "") {
             const { password, ...userDataWithoutPassword } = userData;
@@ -46,6 +46,8 @@ export const UserForm = ({ onClose, initialData, isAdminPage = false } : Props) 
         } else {
             userDataFilter = userData;
         }
+
+        userDataFilter.role_ID = parseInt(String(userDataFilter.role_ID))
 
         await updateOrRegisterUser(userDataFilter, onClose, isEditMode, isAdminPage)
     }); 
@@ -65,11 +67,9 @@ export const UserForm = ({ onClose, initialData, isAdminPage = false } : Props) 
         {/* Formulario */}
         <form onSubmit={onSubmited} className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* ID del usuario - Solo visible en modo edición */}
-            {isEditMode && (
               <div className="col-span-1">
                 <label htmlFor="user_ID" className="block text-sm font-medium text-gray-400 mb-1.5">
-                  ID de Usuario
+                  Documento <span className="text-yellow-500">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
@@ -78,13 +78,13 @@ export const UserForm = ({ onClose, initialData, isAdminPage = false } : Props) 
                   <input
                     type="text"
                     id="user_ID"
-                    disabled
+                    disabled={isEditMode}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500/30 focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed"
                     {...register('user_ID')}
                   />
                 </div>
               </div>
-            )}
+          
   
             {/* Nombre */}
             <div className="col-span-1">

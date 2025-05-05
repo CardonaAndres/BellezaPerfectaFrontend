@@ -10,9 +10,9 @@ const getRoleDetails = (roleId: number) => {
     case 1:
       return { name: 'Administrador', color: 'text-white', bg: 'bg-amber-500' };
     case 2:
-      return { name: 'Empleado', color: 'text-blue-500', bg: 'bg-blue-500' };
+      return { name: 'Empleado', color: 'text-white', bg: 'bg-blue-500' };
     default:
-      return { name: 'Usuario', color: 'text-gray-500', bg: 'bg-gray-500' };
+      return { name: 'Usuario', color: 'text-white', bg: 'bg-gray-500' };
   }
 };
 

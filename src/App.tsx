@@ -10,6 +10,8 @@ import { ClientManagementPage } from './clients/pages/ClientManagementPage';
 import { ProductsManagmentPage } from './products/pages/ProductsManagmentPage';
 import { InventoryRecordsPage } from './inventory/pages/InventoryRecordsPage';
 import { ProfilePage } from './users/pages/common/ProfilePage';
+import { AccessControl } from './auth/components/AccessContro';
+import { UserManagerPage } from './users/pages/admin/UserManagerPage';
 
 function App() {
   
@@ -26,9 +28,12 @@ function App() {
             <Route path={router.products} element={<ProductsManagmentPage />} />
             <Route path={router.inventoryRecords} element={<InventoryRecordsPage />} />
             <Route path={router.profile} element={<ProfilePage />} />
-      
-          </Route>
-          
+            
+            <Route element={<AccessControl />}>
+              <Route path={router.users} element={<UserManagerPage />} />
+
+            </Route>
+          </Route> 
         </Routes>
       </Router>
     </AuthProvider>

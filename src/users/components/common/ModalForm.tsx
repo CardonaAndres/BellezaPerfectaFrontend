@@ -6,16 +6,18 @@ import { UserForm } from "./UserForm";
 type Props = {
     onClose : () => void,
     open : boolean,
+    isAdminPage ?: boolean,
     userData ?: UserProfileProps
 }
 
-export const ModalForm = ({ onClose, open, userData } : Props) => {
+export const ModalForm = ({ onClose, open, userData, isAdminPage = false } : Props) => {
 
     const initialData : UserProfileProps = {
         user_ID : userData?.user_ID || null,
         name : userData?.name || '',
         email : userData?.email || '',
         cellphone : userData?.cellphone || '',
+        password : '',
         address : userData?.address || '',
         role_ID : userData?.role_ID || 2
     }
@@ -23,7 +25,7 @@ export const ModalForm = ({ onClose, open, userData } : Props) => {
     return (
         <Modal open={open} onClose={onClose}>
             <Box sx={modalStyles}>
-                <UserForm onClose={onClose} initialData={initialData} />
+                <UserForm onClose={onClose} initialData={initialData} isAdminPage={isAdminPage} />
             </Box>
         </Modal>
     )

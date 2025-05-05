@@ -1,5 +1,6 @@
 import { useState } from "react";
-import * as UserCommonApi from '../../API/common/userCommon';
+import * as UserCommonAPI from '../../API/common/userCommon';
+import { registerUser } from "../../API/admin/userAdmin";
 import { ErrorAlert } from "../../../common/components/alerts/ErrorAlert";
 import { UserProfileProps } from "../../ts/common/types";
 import { SuccessAlert } from "../../../common/components/alerts/SuccessAlert";
@@ -13,7 +14,7 @@ export const useUserCommonHook = () => {
     const getProfile = async () => {
         try {
             setLoading(false);
-            const res = await UserCommonApi.me();
+            const res = await UserCommonAPI.me();
 
             if(!res.status) throw new Error(res.message);
             if(!res.data.user) throw new Error(res.message);
@@ -34,12 +35,15 @@ export const useUserCommonHook = () => {
         isAdminMode : boolean = false
     ) => {
         try {
-            const res = await UserCommonApi.update(isAdminMode, userData, (userData.user_ID || ''));
+            const res = isEditMode 
+            ? await UserCommonAPI.update(isAdminMode, userData, (userData.user_ID || ''))
+            : await registerUser(userData)
+
             if(!res.status) throw new Error(res.message)
 
             onClose();
-            logout();
-            SuccessAlert(`${res.data.message}, la sesión será cerrada por seguridad`)
+            if(isEditMode && !isAdminMode) logout()
+            SuccessAlert( `${res.data.message} ${(isEditMode && !isAdminMode) ? ', la sesión será cerrada por seguridad' : ''}`)
                
         } catch (err : any) {
             onClose();
