@@ -17,7 +17,7 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
             <div className="container mx-auto px-4 py-3 flex items-center justify-between">
                 <div className="flex items-center">
                     <User size={24} className="text-yellow-500 mr-2" />
-                    <h1 className="text-yellow-500 font-bold text-xl">Gestión de Clientes</h1>
+                    <h1 className="text-yellow-500 font-bold text-xl">Mis Usuarios</h1>
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="text-white text-sm">

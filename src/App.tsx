@@ -12,6 +12,7 @@ import { InventoryRecordsPage } from './inventory/pages/InventoryRecordsPage';
 import { ProfilePage } from './users/pages/common/ProfilePage';
 import { AccessControl } from './auth/components/AccessContro';
 import { UserManagerPage } from './users/pages/admin/UserManagerPage';
+import { InvoicesByClientPage } from './panel/pages/InvoicesByClientPage';
 
 function App() {
   
@@ -28,10 +29,10 @@ function App() {
             <Route path={router.products} element={<ProductsManagmentPage />} />
             <Route path={router.inventoryRecords} element={<InventoryRecordsPage />} />
             <Route path={router.profile} element={<ProfilePage />} />
+            <Route path={router.invoiceByClien} element={<InvoicesByClientPage />} />
             
             <Route element={<AccessControl />}>
               <Route path={router.users} element={<UserManagerPage />} />
-
             </Route>
           </Route> 
         </Routes>

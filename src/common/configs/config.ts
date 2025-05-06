@@ -8,5 +8,6 @@ export const router = {
     products : '/products',
     inventoryRecords : '/product-inventory-records',
     users : '/user-managment',
-    profile : '/me'
+    profile : '/me',
+    invoiceByClien : '/invoices-by-client'
 }

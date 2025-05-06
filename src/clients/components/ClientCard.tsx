@@ -3,6 +3,8 @@ import { Client } from '../ts/types';
 import { useState } from 'react';
 import { ClientModal } from './ClientModal';
 import { useClientsHook } from '../hooks/useClientsHook';
+import { Link } from 'react-router-dom';
+import { router } from '../../common/configs/config';
 
 export const ClientCard = ({ client }: { client: Client }) => {
   const { loading, deleteClient } = useClientsHook();
@@ -88,9 +90,9 @@ export const ClientCard = ({ client }: { client: Client }) => {
       
       {/* Footer de la tarjeta */}
       <div className="bg-black bg-opacity-50 p-3 flex justify-end space-x-2">
-        <button className="bg-transparent hover:bg-gray-800 text-white px-3 py-1 rounded border border-gray-700 text-sm transition-colors duration-300">
+        <Link to={`${router.invoiceByClien}?client_ID=${client.client_ID}`} className="bg-transparent hover:bg-gray-800 text-white px-3 py-1 rounded border border-gray-700 text-sm transition-colors duration-300">
           Detalles
-        </button>
+        </Link>
         <button onClick={async () => deleteClient(client_ID, () => {})} disabled={loading} className="bg-red-800 hover:bg-red-600 text-white px-3 py-1 rounded border border-gray-700 text-sm transition-colors duration-300">
           Eliminar
         </button>

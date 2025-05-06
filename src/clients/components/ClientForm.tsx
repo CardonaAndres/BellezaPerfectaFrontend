@@ -2,6 +2,8 @@ import { useForm } from 'react-hook-form';
 import { useClientsHook } from '../hooks/useClientsHook';
 import { Client } from '../ts/types';
 import { Save, X, User, FileText, MapPin, Phone, Home, Hash, FileCheck, Trash, MapPinned } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { router } from '../../common/configs/config';
 
 type ClientFormProps = {
   initialData?: Client;
@@ -181,6 +183,12 @@ export const ClientForm = ({ initialData, onClose, }: ClientFormProps) => {
                 <Trash size={16} className="mr-1" />
                 Eliminar
               </button>
+            }
+            {isEditing &&     
+              <Link to={`${router.invoiceByClien}?client_ID=${client_ID}`} type="button"  className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center"
+              >
+                Detalles
+              </Link>
             }
           <button
             type="button"

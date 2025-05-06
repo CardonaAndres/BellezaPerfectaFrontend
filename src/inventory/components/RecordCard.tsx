@@ -40,7 +40,7 @@ export const RecordCard = ({ record } : Props) => {
         
             <div className="flex flex-col md:items-end">
                 <div className={`font-semibold ${record.quantity >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {record.quantity >= 0 ? '+' : ''}{record.quantity} unidades
+                {record.quantity} unidades
                 </div>
                 <div className="flex items-center text-sm text-gray-400 mt-1">
                 <FileText size={14} className="mr-1" />
