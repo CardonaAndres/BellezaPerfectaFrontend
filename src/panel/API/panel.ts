@@ -2,6 +2,27 @@ import Cookie from 'js-cookie';
 import { SERVER_URL } from "../../common/configs/config";
 import { InvoiceFormData } from '../ts/types';
 
+export const getAllInvoicesWithoutPaginate = async () => {
+    try {
+        const token = Cookie.get('token');
+
+        const res = await fetch(`${SERVER_URL}/invoices/history`,{
+            method : 'GET', credentials : 'include', 
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.message || 'Internal Server Error')
+
+        return { status : true, data }   
+    } catch (err : any) {
+        return { status : false, message : err.message }
+    }   
+}
+
 export const getAllInvoices = async (limit = 18, page = 1) => {
     try {
         const token = Cookie.get('token');
@@ -29,6 +50,27 @@ export const getAllInvoicesByClient = async (limit = 18, page = 1, client_ID : s
 
         const res = await fetch(
             `${SERVER_URL}/invoices/client/${client_ID}/?limit=${limit}&page=${page}`,{
+            method : 'GET', credentials : 'include', 
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.message || 'Internal Server Error')
+
+        return { status : true, data }   
+    } catch (err : any) {
+        return { status : false, message : err.message }
+    }   
+}
+
+export const getInvoiceByID = async (invoice_ID : number) => {
+    try {
+        const token = Cookie.get('token');
+
+        const res = await fetch(`${SERVER_URL}/invoices/${invoice_ID}`,{
             method : 'GET', credentials : 'include', 
             headers: { 
                 "Content-Type": "application/json",

@@ -1,12 +1,14 @@
+import Cookies from "js-cookie";
 import { useState } from "react";
 import * as PanelAPI from '../API/panel';
 import * as ProductAPI from '../../products/API/products';
 import * as ClientsAPI from '../../clients/API/clients';
 import { ErrorAlert } from "../../common/components/alerts/ErrorAlert";
 import { Client } from "../../clients/ts/types";
-import { InvoiceFormData } from "../ts/types";
+import { Invoice, InvoiceFormData } from "../ts/types";
 import { SuccessAlert } from "../../common/components/alerts/SuccessAlert";
 import { ConfirmAlert } from "../../common/components/alerts/ConfirmAlert";
+import { InvoicesFormats } from "../classes/InvoicesFormats";
 
 type Product = {
     product_ID: string;
@@ -97,6 +99,63 @@ export const usePanelHook = () => {
         }
     }
 
+    const getInvoiceByID = async (invoice_ID : number) => {
+        try {
+            setLoading(true);
+            const res = await PanelAPI.getInvoiceByID(invoice_ID);
+            if(!res.status) throw new Error(res.message)
+            return res.data.invoice
+        } catch (err : any) {
+            ErrorAlert(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const downloadInvoiceAsPDF = async (invoice : Invoice) => {
+        try {
+            setLoading(true);
+            await InvoicesFormats.downloadInvoiceAsPDF(invoice);
+        } catch (err : any) {
+            ErrorAlert(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const downloadAllInvoices = async (invoices: Invoice[] = [] ) => {
+        const durationInDays = 10 / (24 * 60);
+        let invoicesData : Invoice[] | [];
+        
+        try {
+
+            if (invoices.length >= 1) {
+                invoicesData = invoices;
+            } else {
+                const { getHistory } = Cookies.get();
+
+                if(getHistory){
+                    throw new Error(
+                     'Por favor, esperar 10 minutos para volver a descargar el historial completo'
+                    )
+                }
+                    
+                const res = await PanelAPI.getAllInvoicesWithoutPaginate();
+                if (!res.status) throw new Error(res.message);
+                invoicesData = res.data.invoices; 
+
+                Cookies.set('getHistory', 'true', { expires: durationInDays });
+            }
+            
+            await InvoicesFormats.exportInvoicesToExcel(invoicesData)
+
+        } catch (err : any) {
+            ErrorAlert(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const createInvoice = async (onClose : () => void, invoiceData : InvoiceFormData) => {
         try {
             setLoading(false);
@@ -171,8 +230,9 @@ export const usePanelHook = () => {
         createInvoice,
         getAllInvoicesByClient,
         updateInvoice,
-        deleteInvoice
+        deleteInvoice,
+        getInvoiceByID,
+        downloadInvoiceAsPDF,
+        downloadAllInvoices
     }
 }
-
-

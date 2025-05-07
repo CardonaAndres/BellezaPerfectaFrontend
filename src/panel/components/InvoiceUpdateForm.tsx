@@ -12,7 +12,8 @@ import {
   ChevronDown, 
   User, 
   Search, 
-  Package 
+  Package, 
+  Printer
 } from 'lucide-react';
 
 // Opciones de pago
@@ -32,16 +33,23 @@ type Props = {
 }
 
 export const InvoiceUpdateForm = ({ onClose, invoice }: Props) => {
-  const { loading, products, getProducts, updateInvoice, deleteInvoice } = usePanelHook();
   const [isPaymentDropdownOpen, setIsPaymentDropdownOpen] = useState(false);
   const [productSearchQueries, setProductSearchQueries] = useState<string[]>([]);
   const [isProductDropdownOpen, setIsProductDropdownOpen] = useState<number | null>(null);
+  const { 
+    loading, 
+    products, 
+    getProducts, 
+    updateInvoice, 
+    deleteInvoice, 
+    downloadInvoiceAsPDF 
+  } = usePanelHook();
   
   // Configurar react-hook-form con los valores de la factura existente
   const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm<InvoiceFormData>({
     defaultValues: {
       client_ID: invoice.client_ID.client_ID,
-      date_end: invoice.date_end,
+      date_end: new Date(Date.now() + 86400000).toISOString().split('T')[0],
       type_payment: invoice.type_payment,
       city: invoice.city,
       zone: invoice.zone,
@@ -55,6 +63,8 @@ export const InvoiceUpdateForm = ({ onClose, invoice }: Props) => {
       }))
     }
   });
+
+  const onDownloadInvoiceAsPDF = async () => await downloadInvoiceAsPDF(invoice);
 
   const onDelete =  async () => await deleteInvoice(true, invoice.invoice_ID, onClose)
   
@@ -139,6 +149,12 @@ export const InvoiceUpdateForm = ({ onClose, invoice }: Props) => {
             <X size={16} className="mr-1" />
             Cancelar
           </button>
+          <button type="button" onClick={onDownloadInvoiceAsPDF} disabled={loading}
+            className="bg-gray-800 hover:bg-amber-500 text-white px-4 py-2 rounded-lg flex items-center"
+          >
+            <Printer size={16} className="mr-1" />
+            Imprimir
+          </button>
           <button type="button" onClick={onDelete} disabled={loading}
             className="bg-gray-800 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center"
           >
@@ -170,7 +186,7 @@ export const InvoiceUpdateForm = ({ onClose, invoice }: Props) => {
               </label>
               <div className="relative">
                 <input
-                  type="date"
+                  type="date" min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
                   className="bg-gray-900 border border-gray-700 text-white w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                   {...register('date_end', { required: 'La fecha es obligatoria' })}
                 />

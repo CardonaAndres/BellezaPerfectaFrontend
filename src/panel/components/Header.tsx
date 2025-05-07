@@ -1,19 +1,45 @@
-import { Search, ChevronDown, List, Plus, Calculator } from 'lucide-react';
+import { Search, ChevronDown, List, Plus, Calculator, Calendar, Download } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GeneralProps } from '../../common/assets/ts/types';
 import { limitOptions } from '../../common/assets/ts/options';
 import { InvoiceCreateFormModal } from './InvoiceCreateFormModal';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { router } from '../../common/configs/config';
+import { usePanelHook } from '../hooks/usePanelHook';
+import { Invoice } from '../ts/types';
+import { InvoiceUpdateFormModal } from './InvoiceUpdateFormModal';
 
 export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
     const location = useLocation();
+    const navigation = useNavigate();
+    const [ invoiceData, setInvoiceData ] = useState<Invoice | null>(null);
+    const { loading, getInvoiceByID, downloadAllInvoices } = usePanelHook();
     const [ modalOpen, setModalOpen ] = useState(false);
     const [isLimitDropdownOpen, setIsLimitDropdownOpen] = useState(false);
-    const { register, handleSubmit,  } = useForm({});
+    const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
+    const { register, handleSubmit } = useForm();
 
     const handleModal = () : void => setModalOpen(!modalOpen);
+
+    const onSearch = handleSubmit(async (data) => {
+        const { invoice_ID } = data;
+        const invoiceIDNumber = parseInt(invoice_ID)
+
+        if(typeof invoiceIDNumber !== 'number') return;
+
+        const invoice = await getInvoiceByID(invoiceIDNumber);
+        if(invoice){
+            setInvoiceData(invoice);
+            handleModal();
+        }
+        
+    });
+
+    const onSearchByDates = handleSubmit(async (data) => {
+        const { date_start, date_end } = data;
+        navigation(`${router.InvoicesByDates}?startDate=${date_start}&endDate=${date_end}`)
+    });
 
     return (
         <div className="w-full bg-black text-white shadow-lg">
@@ -29,7 +55,8 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
                             Facturas totales: <span className="text-yellow-500 font-semibold">{meta.total}</span>
                         </div>
                         {(location.pathname !== router.invoiceByClien) && (
-                            <button onClick={handleModal} className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-4 py-2 rounded-lg flex items-center transition-colors duration-300"
+                            <button disabled={loading} className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-4 py-2 rounded-lg flex items-center transition-colors duration-300" 
+                            onClick={() => {setInvoiceData(null); handleModal();}}
                             >
                                 <Plus size={18} className="mr-1" />
                                 <span>Nueva Factura</span>
@@ -48,17 +75,69 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <Search size={18} className="text-gray-400" />
                             </div>
-                            <input type="text" placeholder="Buscar factura..."
+                            <input disabled={loading} type="number" placeholder="Buscar factura..."
                                 className="bg-gray-900 border border-gray-700 text-white w-full pl-10 pr-4 py-2 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-yellow-500"
                                 {...register('invoice_ID')}
                             />
-                            <button type="button" className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-4 py-2 rounded-r-lg flex items-center transition-colors duration-300" >
+                            <button disabled={loading} onClick={onSearch} type="button" className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-4 py-2 rounded-r-lg flex items-center transition-colors duration-300" >
                                 <Search size={18} className="mr-1" />
                                 <span>Buscar</span>
                             </button>
                         </div>
                     )}
                 </div>
+
+                {/* Filtros de fecha y botón de descarga */}
+                {(location.pathname !== router.invoiceByClien) && (
+                    <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
+                        <div className="flex items-center gap-2 w-full md:w-auto">
+                            <button 
+                                className="bg-gray-800 hover:bg-gray-700 text-white font-medium px-4 py-2 rounded-lg flex items-center transition-colors duration-300"
+                                onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
+                            >
+                                <Calendar size={18} className="mr-2 text-yellow-500" />
+                                <span>Filtrar por fechas</span>
+                                <ChevronDown size={14} className={`text-yellow-500 ml-2 transition-transform ${isDateFilterOpen ? 'transform rotate-180' : ''}`} />
+                            </button>
+                            <button onClick={async () => await downloadAllInvoices()} className="bg-gray-800 hover:bg-gray-700 text-white font-medium px-4 py-2 rounded-lg flex items-center transition-colors duration-300">
+                                <Download size={18} className="mr-2 text-yellow-500" />
+                                <span>Descargar historial completo</span>
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Filtros de fecha desplegables */}
+                {(location.pathname !== router.invoiceByClien) && isDateFilterOpen && (
+                    <div className="mt-4 p-4 bg-gray-900 border border-gray-700 rounded-lg">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <div className="w-full md:w-1/2">
+                                <label className="block text-gray-300 text-sm font-medium mb-2">Fecha inicio</label>
+                                <input 
+                                    type="date" 
+                                    max={new Date(Date.now() - 86400000).toISOString().split('T')[0]}
+                                    className="bg-gray-800 border border-gray-700 text-white w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                                    {...register('date_start')}
+                                />
+                            </div>
+                            <div className="w-full md:w-1/2">
+                                <label className="block text-gray-300 text-sm font-medium mb-2">Fecha fin</label>
+                                <input 
+                                    type="date" 
+                                    min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
+                                    className="bg-gray-800 border border-gray-700 text-white w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                                    {...register('date_end')}
+                                />
+                            </div>
+                        </div>
+                        <div className="mt-4 flex justify-end">
+                            <button onClick={onSearchByDates} className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-4 py-2 rounded-lg transition-colors duration-300">
+                                Buscar
+                            </button>
+                        </div>
+                    </div>
+                )}
+                
                 {/* Selector de límite por página */}
                 <div className="flex items-center justify-end mt-4">
                     <div className="flex items-center">
@@ -100,6 +179,13 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
             </div>
 
             <InvoiceCreateFormModal open={modalOpen} onClose={handleModal}  />
+            {invoiceData && (
+                <InvoiceUpdateFormModal
+                    open={modalOpen}
+                    onClose={handleModal} 
+                    invoice={invoiceData}
+                />
+            )}
         </div>
     );
 };

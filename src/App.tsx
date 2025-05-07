@@ -13,6 +13,7 @@ import { ProfilePage } from './users/pages/common/ProfilePage';
 import { AccessControl } from './auth/components/AccessContro';
 import { UserManagerPage } from './users/pages/admin/UserManagerPage';
 import { InvoicesByClientPage } from './panel/pages/InvoicesByClientPage';
+import { InvoicesByDates } from './panel/pages/InvoicesByDates';
 
 function App() {
   
@@ -30,6 +31,7 @@ function App() {
             <Route path={router.inventoryRecords} element={<InventoryRecordsPage />} />
             <Route path={router.profile} element={<ProfilePage />} />
             <Route path={router.invoiceByClien} element={<InvoicesByClientPage />} />
+            <Route path={router.InvoicesByDates} element={<InvoicesByDates />} />
             
             <Route element={<AccessControl />}>
               <Route path={router.users} element={<UserManagerPage />} />

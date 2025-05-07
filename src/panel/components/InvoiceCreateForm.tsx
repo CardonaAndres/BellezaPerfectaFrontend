@@ -168,7 +168,7 @@ export const InvoiceCreateForm = ({ onClose }: Props) => {
               </label>
               <div className="relative">
                 <input
-                  type="date"
+                  type="date" min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
                   className="bg-gray-900 border border-gray-700 text-white w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                   {...register('date_end', { required: 'La fecha es obligatoria' })}
                 />

@@ -41,11 +41,12 @@ const formatDate = (dateString: string) => {
 
 export const InvoiceCard = ({ invoice } : Props) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const { loading, deleteInvoice } = usePanelHook();
+    const { loading, deleteInvoice, downloadInvoiceAsPDF } = usePanelHook();
     const [ modal, setModal ] = useState(false);
-
+    
+    const onDownloadInvoiceAsPDF = async () => await downloadInvoiceAsPDF(invoice);
     const handleModal = () => setModal(!modal);
-    const onDelete = async () => await deleteInvoice(false, (invoice.invoice_ID || 0))
+    const onDelete = async () => await deleteInvoice(false, (invoice.invoice_ID || 0));
 
     return (
         <div className="bg-gray-900 border border-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:border-amber-500">
@@ -62,7 +63,7 @@ export const InvoiceCard = ({ invoice } : Props) => {
                 </span>
                 <button disabled={loading}
                   className="bg-gray-800 hover:bg-gray-700 p-1 rounded-full transition-colors"
-                  onClick={() => window.print()}
+                  onClick={onDownloadInvoiceAsPDF}
                 >
                   <Printer size={16} className="text-amber-500" />
                 </button>

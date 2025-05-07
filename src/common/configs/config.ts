@@ -9,5 +9,6 @@ export const router = {
     inventoryRecords : '/product-inventory-records',
     users : '/user-managment',
     profile : '/me',
-    invoiceByClien : '/invoices-by-client'
+    invoiceByClien : '/invoices-by-client',
+    InvoicesByDates : '/invoices-by-dates'
 }
