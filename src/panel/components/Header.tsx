@@ -54,7 +54,7 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
                         <div className="text-white text-sm">
                             Facturas totales: <span className="text-yellow-500 font-semibold">{meta.total}</span>
                         </div>
-                        {(location.pathname !== router.invoiceByClien) && (
+                        {(location.pathname === router.panel) && (
                             <button disabled={loading} className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-4 py-2 rounded-lg flex items-center transition-colors duration-300" 
                             onClick={() => {setInvoiceData(null); handleModal();}}
                             >
@@ -70,7 +70,7 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
             <div className="container mx-auto px-4 py-4">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     {/* Buscador */}
-                    {(location.pathname !== router.invoiceByClien) && (
+                    {(location.pathname === router.panel) && (
                         <div className="relative w-full flex">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <Search size={18} className="text-gray-400" />
@@ -88,7 +88,7 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
                 </div>
 
                 {/* Filtros de fecha y botón de descarga */}
-                {(location.pathname !== router.invoiceByClien) && (
+                {(location.pathname === router.panel) && (
                     <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
                         <div className="flex items-center gap-2 w-full md:w-auto">
                             <button 
@@ -108,15 +108,12 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
                 )}
 
                 {/* Filtros de fecha desplegables */}
-                {(location.pathname !== router.invoiceByClien) && isDateFilterOpen && (
+                {(location.pathname === router.panel) && isDateFilterOpen && (
                     <div className="mt-4 p-4 bg-gray-900 border border-gray-700 rounded-lg">
                         <div className="flex flex-col md:flex-row gap-4">
                             <div className="w-full md:w-1/2">
                                 <label className="block text-gray-300 text-sm font-medium mb-2">Fecha inicio</label>
-                                <input 
-                                    type="date" 
-                                    max={new Date(Date.now() - 86400000).toISOString().split('T')[0]}
-                                    className="bg-gray-800 border border-gray-700 text-white w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                                <input type="date" className="bg-gray-800 border border-gray-700 text-white w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500"
                                     {...register('date_start')}
                                 />
                             </div>
@@ -124,7 +121,9 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
                                 <label className="block text-gray-300 text-sm font-medium mb-2">Fecha fin</label>
                                 <input 
                                     type="date" 
-                                    min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
+                                    defaultValue={
+                                        new Date(Date.now() - 86400000).toISOString().split('T')[0]
+                                    }
                                     className="bg-gray-800 border border-gray-700 text-white w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500"
                                     {...register('date_end')}
                                 />

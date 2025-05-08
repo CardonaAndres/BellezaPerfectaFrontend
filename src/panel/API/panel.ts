@@ -44,6 +44,29 @@ export const getAllInvoices = async (limit = 18, page = 1) => {
     }   
 }
 
+export const getAllInvoicesByDates = async (
+    limit = 18, page = 1, startDate : string, endDate : string
+) => {
+    try {
+        const token = Cookie.get('token');
+
+        const res = await fetch(`${SERVER_URL}/reports/sales-by-period/?limit=${limit}&page=${page}&startDate=${startDate}&endDate=${endDate}`,{
+            method : 'GET', credentials : 'include', 
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.message || 'Internal Server Error')
+
+        return { status : true, data }   
+    } catch (err : any) {
+        return { status : false, message : err.message }
+    }   
+}
+
 export const getAllInvoicesByClient = async (limit = 18, page = 1, client_ID : string) => {
     try {
         const token = Cookie.get('token');

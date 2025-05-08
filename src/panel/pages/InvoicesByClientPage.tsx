@@ -68,11 +68,11 @@ export const InvoicesByClientPage = () => {
                 </div>
             
                 <Pagination 
-                currentPage={page}
-                totalPages={meta.last_page}
-                onPageChange={handlePageChange}
-                className="mt-4"
-            />
+                    currentPage={page}
+                    totalPages={meta.last_page}
+                    onPageChange={handlePageChange}
+                    className="mt-4"
+                />
 
             </div>
         </SidebarLayout>

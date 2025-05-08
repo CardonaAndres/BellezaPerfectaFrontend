@@ -5,7 +5,7 @@ import * as ProductAPI from '../../products/API/products';
 import * as ClientsAPI from '../../clients/API/clients';
 import { ErrorAlert } from "../../common/components/alerts/ErrorAlert";
 import { Client } from "../../clients/ts/types";
-import { Invoice, InvoiceFormData } from "../ts/types";
+import { dailySaleType, Invoice, InvoiceFormData } from "../ts/types";
 import { SuccessAlert } from "../../common/components/alerts/SuccessAlert";
 import { ConfirmAlert } from "../../common/components/alerts/ConfirmAlert";
 import { InvoicesFormats } from "../classes/InvoicesFormats";
@@ -19,6 +19,7 @@ type Product = {
 export const usePanelHook = () => {
     const [ loading, setLoading ] = useState<boolean>(false);
     const [ products, setProducts  ] = useState<Product[] | []>([]);
+    const [ dailySales, setDailySales] = useState<dailySaleType[] | []>();
     const [ clients, setClients ] = useState<Client[] | []>([]);
     const [ invoices, setInvoices ] = useState([]);
     const [ meta, setMeta ] = useState({
@@ -26,6 +27,11 @@ export const usePanelHook = () => {
         page : 0,
         limit : 0,
         last_page : 0
+    });
+    const [ summary, setSummary ] = useState({
+        totalSales: 0,
+        invoiceCount: 0,
+        averageTicket: 0
     });
 
     const getAllInvoices = async (limit = 18, page = 1) => {
@@ -53,6 +59,24 @@ export const usePanelHook = () => {
             setMeta({...res.data.meta, last_page : res.data.meta.totalPages});
             setInvoices(res.data.invoices)
             
+        } catch (err : any) {
+            ErrorAlert(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const getAllInvoicesByDates = async (limit = 18, page = 1, startDate : string, endDate : string) => {
+        try {
+            setLoading(true);
+            const res = await PanelAPI.getAllInvoicesByDates(limit, page, startDate, endDate);
+            if(!res.status) throw new Error(res.message);
+            
+            setMeta(res.data.meta);
+            setInvoices(res.data.rawData);
+            setSummary(res.data.summary);
+            setDailySales(res.data.dailySales)
+
         } catch (err : any) {
             ErrorAlert(err.message);
         } finally {
@@ -233,6 +257,9 @@ export const usePanelHook = () => {
         deleteInvoice,
         getInvoiceByID,
         downloadInvoiceAsPDF,
-        downloadAllInvoices
+        downloadAllInvoices,
+        getAllInvoicesByDates,
+        dailySales,
+        summary
     }
 }

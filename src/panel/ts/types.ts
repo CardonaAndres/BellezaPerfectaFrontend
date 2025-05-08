@@ -75,3 +75,9 @@ export type InvoiceFormData = {
     cellphone: string;
     productsList: ProductItem[];
 };
+
+export type dailySaleType = {
+    date: string,
+    invoiceCount: number,
+    total: number
+}
