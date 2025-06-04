@@ -23,7 +23,7 @@ type Props = {
 
 export const InvoiceCreateForm = ({ onClose }: Props) => {
   const { loading, clients, getClients, products, getProducts, createInvoice } = usePanelHook();
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [_, setSelectedClient] = useState<Client | null>(null);
   const [isClientDropdownOpen, setIsClientDropdownOpen] = useState(false);
   const [isPaymentDropdownOpen, setIsPaymentDropdownOpen] = useState(false);
   const [clientSearchQuery, setClientSearchQuery] = useState('');
@@ -120,7 +120,7 @@ export const InvoiceCreateForm = ({ onClose }: Props) => {
   
   // Calcular total de la factura
   const calculateTotal = () => {
-    return fields.reduce((total, field, index) => {
+    return fields.reduce((total, _, index) => {
       const quantity = watch(`productsList.${index}.quantity`) || 0;
       const price = watch(`productsList.${index}.price`) || 0;
       return total + (quantity * price);

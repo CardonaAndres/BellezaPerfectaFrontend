@@ -126,7 +126,7 @@ export const InvoiceUpdateForm = ({ onClose, invoice }: Props) => {
   
   // Calcular total de la factura
   const calculateTotal = () => {
-    return fields.reduce((total, field, index) => {
+    return fields.reduce((total, _, index) => {
       const quantity = watch(`productsList.${index}.quantity`) || 0;
       const price = watch(`productsList.${index}.price`) || 0;
       return total + (quantity * price);

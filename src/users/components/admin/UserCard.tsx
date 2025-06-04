@@ -11,7 +11,7 @@ type Props = {
 const getRoleLabel = (roleId: number): string => {
     const roles = {
       1: 'Administrador',
-      2: 'Cliente',
+      2: 'Trabajador',
     };
 
     return roles[roleId as keyof typeof roles] || 'Usuario';

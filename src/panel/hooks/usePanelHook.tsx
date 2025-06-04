@@ -126,6 +126,8 @@ export const usePanelHook = () => {
     const getInvoiceByID = async (invoice_ID : number) => {
         try {
             setLoading(true);
+            if(!invoice_ID) throw new Error('Falta el número de la factura  ');
+
             const res = await PanelAPI.getInvoiceByID(invoice_ID);
             if(!res.status) throw new Error(res.message)
             return res.data.invoice

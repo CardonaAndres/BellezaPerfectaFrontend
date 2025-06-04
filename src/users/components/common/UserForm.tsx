@@ -22,7 +22,7 @@ const roles : Role[] = [
     },
     {
         role_ID : 2,
-        name : 'Cliente'
+        name : 'Trabajador'
     }
 ];
 

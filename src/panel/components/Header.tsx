@@ -162,7 +162,7 @@ export const Header = ({ meta, limit, page, onLimitChange }: GeneralProps) => {
                                 </div>
                             )}
                         </div>
-                        <span className="text-gray-300 ml-2 text-sm">clientes por página</span>
+                        <span className="text-gray-300 ml-2 text-sm">Facturas por página</span>
                     </div>
                 </div>
 
